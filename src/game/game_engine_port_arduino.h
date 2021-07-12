@@ -4,25 +4,23 @@
 
 struct Screen : public ge::Canvas {
     Screen() {
-        Wire.begin(OLED_SDA, OLED_SCL);
-        display.begin(SSD1306_SWITCHCAPVCC, 0x3c, true, false);
+        u8g2.begin();
+        u8g2.setFont(u8g2_font_6x10_tf);
     }
 
     void onClear() override {
-        display.clearDisplay();
+        u8g2.clearBuffer();
     }
 
     void onDraw() override {
-        display.display();
+        u8g2.sendBuffer();
     }
 
     void drawBitmap(uint16_t x, uint16_t y, const uint8_t* bitmap, uint16_t w, uint16_t h, uint16_t color) override {
-        display.drawBitmap(x, y, bitmap, w, h, color);
+        u8g2.drawBitmap(x, y, ceil((double)w / 8), h, bitmap);
     }
 
     size_t drawBuffer(uint16_t x, uint16_t y, const char *buffer, size_t len) override {
-        display.setCursor(x, y);
-        display.setTextColor(WHITE);
-        return display.write((const uint8_t*) buffer, len);
+        return u8g2.drawStr(x, y+10, buffer);
     }
 };
