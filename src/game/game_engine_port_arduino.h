@@ -4,12 +4,8 @@
 
 struct Screen : public ge::Canvas {
     Screen() {
-#ifdef OLED_128X64
-        Wire.begin(D1, D2);
+        Wire.begin(OLED_SDA, OLED_SCL);
         display.begin(SSD1306_SWITCHCAPVCC, 0x3c, true, false);
-#elif defined(OLED_128X32)
-        display.begin();
-#endif
     }
 
     void onClear() override {
